@@ -6,7 +6,6 @@ from googlemaps.places import places_nearby
 
 API_KEY = environ.get('API_KEY')
 
-
 class GoogleMapsCityParser:
     """
     Class for parsing places in specified city
@@ -29,21 +28,17 @@ class GoogleMapsCityParser:
         places = places_nearby(self.maps_client, location=city_geocode[0]['geometry']['location'], radius=15_000, type=place_type)
         return places['results']
 
-    def print_places_info(self, place_type: str):
+    def save_to_json(self, place_type: str, json_file: str):
         """
-        Prints places info
-        :param place_type: place type
+        Save requested gym list to json file
         """
         places = self.get_city_places_by_type(place_type)
-        for place in places:
-            print(place['name'])
-            print(place['vicinity'])
-            print(place.get('rating'))
-            print(place.get('user_ratings_total'))
-            print("Categories:", place['types'])
-            print(place.get('opening_hours'))
-            print()
+        json_places = json.dumps(places)
+        
+        with open(json_file, 'w') as outfile:
+            print('Save requestd gym list into file {}'.format(json_file))
+            json.dump(json_places, outfile)
 
 
 parser = GoogleMapsCityParser(API_KEY, "Tbilisi")
-parser.print_places_info("gym")
+parser.save_to_json("gym", 'gym_list.json')
