@@ -2,7 +2,6 @@ import json
 from os import environ
 
 import googlemaps
-from google.oauth2 import service_account
 from googlemaps.places import places_nearby
 
 API_KEY = environ.get('API_KEY')
@@ -13,8 +12,6 @@ class GoogleMapsCityParser:
     """
     def __init__(self, api_key: str, city: str):
         self.api_key = api_key
-        self.service_account_info = json.load(open("service_account.json"))
-        self.google_credentials = service_account.Credentials.from_service_account_info(self.service_account_info)
         self.maps_client = googlemaps.Client(key=self.api_key)
         self.city = city
 
